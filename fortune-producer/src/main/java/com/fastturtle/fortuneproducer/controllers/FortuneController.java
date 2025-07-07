@@ -1,6 +1,6 @@
-package com.fastturtle.fortuneconsumer.controllers;
+package com.fastturtle.fortuneproducer.controllers;
 
-import com.fastturtle.fortuneconsumer.services.FortuneConsumerService;
+import com.fastturtle.fortuneproducer.services.FortuneProducerService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,16 +12,16 @@ import java.util.Random;
 @RequestMapping("/fortunes")
 public class FortuneController {
 
-    private final FortuneConsumerService fortuneConsumerService;
+    private final FortuneProducerService fortuneProducerService;
 
-    public FortuneController(FortuneConsumerService fortuneConsumerService) {
-        this.fortuneConsumerService = fortuneConsumerService;
+    public FortuneController(FortuneProducerService fortuneProducerService) {
+        this.fortuneProducerService = fortuneProducerService;
     }
 
     @GetMapping("/fetch")
     public String getFortune() {
         Random r = new Random();
-        List<String> fortunes = fortuneConsumerService.getList();
+        List<String> fortunes = fortuneProducerService.getList();
         int index = r.nextInt(fortunes.size());
 
         return fortunes.get(index);
