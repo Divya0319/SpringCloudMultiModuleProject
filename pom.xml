@@ -18,10 +18,13 @@
     <modules>
         <module>fortune-producer</module>
         <module>fortune-consumer</module>
+        <module>fortune-config-server</module>
     </modules>
+
     <properties>
         <java.version>17</java.version>
         <spring.boot.version>3.5.3</spring.boot.version>
+        <spring-cloud.version>2025.0.0</spring-cloud.version>
     </properties>
     <dependencyManagement>
         <dependencies>
