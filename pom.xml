@@ -19,6 +19,7 @@
         <module>fortune-producer</module>
         <module>fortune-consumer</module>
         <module>fortune-config-server</module>
+        <module>api-gateway</module>
     </modules>
 
     <properties>

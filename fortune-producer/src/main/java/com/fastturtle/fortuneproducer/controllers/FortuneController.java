@@ -1,6 +1,7 @@
 package com.fastturtle.fortuneproducer.controllers;
 
 import com.fastturtle.fortuneproducer.services.FortuneProducerService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,12 +20,12 @@ public class FortuneController {
     }
 
     @GetMapping("/fetch")
-    public String getFortune() {
+    public ResponseEntity<String> getFortune() {
         Random r = new Random();
         List<String> fortunes = fortuneProducerService.getList();
         int index = r.nextInt(fortunes.size());
 
-        return fortunes.get(index);
+        return ResponseEntity.ok(fortunes.get(index));
     }
 
 }
