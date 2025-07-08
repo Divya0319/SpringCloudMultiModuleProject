@@ -29,4 +29,10 @@ public class FortuneController {
         return Map.of("fortune", fortunes.get(index));
     }
 
+    @GetMapping("/test")
+    public Map<String, String> test() {
+
+        return Map.of("Test", "test");
+    }
+
 }
