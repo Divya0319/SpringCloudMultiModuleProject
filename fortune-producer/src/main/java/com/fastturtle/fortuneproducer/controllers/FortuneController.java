@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 @RestController
@@ -20,12 +21,12 @@ public class FortuneController {
     }
 
     @GetMapping("/fetch")
-    public ResponseEntity<String> getFortune() {
+    public Map<String, String> getFortune() {
         Random r = new Random();
         List<String> fortunes = fortuneProducerService.getList();
         int index = r.nextInt(fortunes.size());
 
-        return ResponseEntity.ok(fortunes.get(index));
+        return Map.of("fortune", fortunes.get(index));
     }
 
 }
