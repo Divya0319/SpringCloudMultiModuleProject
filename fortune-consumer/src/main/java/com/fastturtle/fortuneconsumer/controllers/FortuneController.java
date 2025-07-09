@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.format.DateTimeFormatter;
 
 @RestController
-@RequestMapping("/fortune-consumer")
+@RequestMapping("/fortunes")
 public class FortuneController {
 
     private final FortuneService fortuneService;

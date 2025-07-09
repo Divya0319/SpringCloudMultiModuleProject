@@ -3,8 +3,10 @@ package com.fastturtle.apigateway.controllers;
 import com.fastturtle.apigateway.models.AppUser;
 import com.fastturtle.apigateway.services.AppUserService;
 import com.fastturtle.apigateway.utils.JwtUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,24 +24,28 @@ public class AuthController {
 
     private final JwtUtil jwtUtil;
 
-    private final Set<String> allowedEmails = Set.of("divygupta0319@gmail.com", "divya@gmail.com");
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthController(AppUserService appUserService, JwtUtil jwtUtil) {
+    public AuthController(AppUserService appUserService, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
         this.appUserService = appUserService;
         this.jwtUtil = jwtUtil;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody Map<String, String> body) {
         String email = body.get("email");
+        String password = body.get("password");
 
-        Optional<AppUser> appUserOptional = appUserService.findByEmail(email);
+        Optional<AppUser> userOptional = appUserService.findByEmail(email);
 
-        if(appUserOptional.isPresent()) {
-            String token = jwtUtil.generateToken(email);
-            return ResponseEntity.ok(token);
+        if(!StringUtils.isBlank(email) && !StringUtils.isBlank(password)) {
+            if (userOptional.isPresent() && passwordEncoder.matches(password, userOptional.get().getPassword())) {
+                String token = jwtUtil.generateToken(email);
+                return ResponseEntity.ok(token);
+            }
         }
 
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
     }
 }
