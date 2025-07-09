@@ -3,19 +3,20 @@ package com.fastturtle.fortuneconsumer.services;
 import com.fastturtle.fortuneconsumer.clients.FortuneProducerClient;
 import com.fastturtle.fortuneconsumer.models.Fortune;
 import com.fastturtle.fortuneconsumer.repos.FortuneRepo;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 @Service
-public class FortuneService {
+public class FortuneConsumerService {
 
     private final FortuneRepo fortuneRepo;
 
     private final FortuneProducerClient fortuneProducerClient;
 
-    public FortuneService(FortuneRepo fortuneRepo, FortuneProducerClient fortuneProducerClient) {
+    public FortuneConsumerService(FortuneRepo fortuneRepo, FortuneProducerClient fortuneProducerClient) {
         this.fortuneRepo = fortuneRepo;
         this.fortuneProducerClient = fortuneProducerClient;
     }

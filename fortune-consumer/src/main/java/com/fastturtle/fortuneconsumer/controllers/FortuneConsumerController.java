@@ -2,7 +2,7 @@ package com.fastturtle.fortuneconsumer.controllers;
 
 import com.fastturtle.fortuneconsumer.dtos.FortuneDTO;
 import com.fastturtle.fortuneconsumer.models.Fortune;
-import com.fastturtle.fortuneconsumer.services.FortuneService;
+import com.fastturtle.fortuneconsumer.services.FortuneConsumerService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,11 +11,11 @@ import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequestMapping("/fortunes")
-public class FortuneController {
+public class FortuneConsumerController {
 
-    private final FortuneService fortuneService;
+    private final FortuneConsumerService fortuneService;
 
-    public FortuneController(FortuneService fortuneService) {
+    public FortuneConsumerController(FortuneConsumerService fortuneService) {
         this.fortuneService = fortuneService;
     }
 

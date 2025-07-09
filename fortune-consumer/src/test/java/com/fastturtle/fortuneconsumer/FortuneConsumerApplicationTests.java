@@ -2,7 +2,7 @@ package com.fastturtle.fortuneconsumer;
 
 import com.fastturtle.fortuneconsumer.models.Fortune;
 import com.fastturtle.fortuneconsumer.repos.FortuneRepo;
-import com.fastturtle.fortuneconsumer.services.FortuneService;
+import com.fastturtle.fortuneconsumer.services.FortuneConsumerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class FortuneConsumerApplicationTests {
 
     @Autowired
-    private FortuneService fortuneService;
+    private FortuneConsumerService fortuneConsumerService;
 
     @Autowired
     private FortuneRepo fortuneRepo;
@@ -28,7 +28,7 @@ class FortuneConsumerApplicationTests {
 
         fortune.setGeneratedFortune("This is your lucky day!");
 
-        Fortune saved = fortuneService.saveGeneratedFortune(fortune);
+        Fortune saved = fortuneConsumerService.saveGeneratedFortune(fortune);
 
         // Assert
         assertThat(saved.getId()).isNotNull();
