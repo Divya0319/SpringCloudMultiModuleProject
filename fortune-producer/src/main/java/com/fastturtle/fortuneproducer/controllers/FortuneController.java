@@ -21,12 +21,12 @@ public class FortuneController {
     }
 
     @GetMapping("/fetch")
-    public Map<String, String> getFortune() {
+    public String getFortune() {
         Random r = new Random();
         List<String> fortunes = fortuneProducerService.getList();
         int index = r.nextInt(fortunes.size());
 
-        return Map.of("fortune", fortunes.get(index));
+        return fortunes.get(index);
     }
 
     @GetMapping("/test")

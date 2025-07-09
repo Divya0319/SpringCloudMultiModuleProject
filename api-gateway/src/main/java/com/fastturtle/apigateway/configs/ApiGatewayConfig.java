@@ -12,10 +12,10 @@ public class ApiGatewayConfig {
     @Bean
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder, JwtAuthenticationFilter jwtFilter) {
         return builder.routes()
-                .route("fortune-producer", r -> r
+                .route("fortune-consumer", r -> r
                         .path("/fortune-service/**") // incoming path to gateway
                         .filters(f -> f.stripPrefix(1).filter(jwtFilter.apply(new JwtAuthenticationFilter.Config()))) // removes '/fortune-service' before forwarding
-                        .uri("http://localhost:8100")) // target microservice
+                        .uri("http://localhost:8200")) // target microservice
                 .build();
     }
 }
