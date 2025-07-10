@@ -2,11 +2,9 @@ package com.fastturtle.fortuneconsumer.services;
 
 import com.fastturtle.fortuneconsumer.models.Fortune;
 import com.fastturtle.fortuneconsumer.repos.FortuneRepo;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -39,10 +37,9 @@ public class FortuneConsumerService {
         return fortuneRepo.save(fortune);
     }
 
-//    @CircuitBreaker(name = "fortuneCircuitBreaker", fallbackMethod = "getRandomFortuneFallback")
+    @Retry(name = "fortuneRetry", fallbackMethod = "getRandomFortuneRetryFallback")
     public Fortune predictAndSaveFortune() {
-        String fortuneGenerated = ((FortuneConsumerService) AopContext.currentProxy()).fetchFortuneWithRetry();
-//        String fortuneGenerated = fetchFortuneWithRetry();
+        String fortuneGenerated = fetchFortuneWithRetry();
 
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Kolkata"));
 
@@ -57,21 +54,15 @@ public class FortuneConsumerService {
         return fortune;
     }
 
-    @Retry(name = "fortuneRetry", fallbackMethod = "getRandomFortuneRetryFallback")
     public String fetchFortuneWithRetry() {
         return restTemplate.getForObject(fortuneProducerUrl + "/fortunes/fetch", String.class);
     }
 
-    public Fortune getRandomFortuneFallback(Exception ex) {
-        logger.info("Circuit is open! Fallback triggered: {}", ex.getMessage());
+    public Fortune getRandomFortuneRetryFallback(Exception ex) {
+        logger.info("Retry exhausted. {}", ex.getMessage());
         Fortune fortune = new Fortune();
-        fortune.setGeneratedFortune("Circuit is open! Fallback triggered: {}" + ex.getMessage());
+        fortune.setGeneratedFortune("Retry exhausted. {}" + ex.getMessage());
         fortune.setTimestamp(LocalDateTime.now());
         return fortune;
-    }
-
-    public String getRandomFortuneRetryFallback(Exception ex) {
-        logger.info("Retry exhausted. {}", ex.getMessage());
-        return "Retry exhausted. " + ex.getMessage();
     }
 }
