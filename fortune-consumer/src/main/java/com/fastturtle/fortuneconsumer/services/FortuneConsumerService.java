@@ -4,6 +4,7 @@ import com.fastturtle.fortuneconsumer.clients.FortuneProducerClient;
 import com.fastturtle.fortuneconsumer.models.Fortune;
 import com.fastturtle.fortuneconsumer.repos.FortuneRepo;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,8 @@ public class FortuneConsumerService {
     }
 
 
-    @CircuitBreaker(name = "fortuneService", fallbackMethod = "getDummyFortune")
+    @Retry(name = "fortuneRetry" , fallbackMethod = "getRandomFortuneRetryFallback")
+//    @CircuitBreaker(name = "fortuneCircuitBreaker", fallbackMethod = "getRandomFortuneFallback")
     public Fortune predictAndSaveFortune() {
         String fortuneGenerated = fortuneProducerClient.getRandomFortune();
 
@@ -43,9 +45,16 @@ public class FortuneConsumerService {
         return fortuneRepo.save(fortune);
     }
 
-    public Fortune getDummyFortune(Exception ex) {
+    public Fortune getRandomFortuneFallback(Exception ex) {
         Fortune fortune = new Fortune();
-        fortune.setGeneratedFortune("Hello and welcome to fallback fortune! I am a dummy! Error you received: " + ex.getMessage());
+        fortune.setGeneratedFortune("Circuit is open! Fallback: Fortune service is unavailable. Error: " + ex.getMessage());
+        fortune.setTimestamp(LocalDateTime.now());
+        return fortune;
+    }
+
+    public Fortune getRandomFortuneRetryFallback(Exception ex) {
+        Fortune fortune = new Fortune();
+        fortune.setGeneratedFortune("Retry exhausted. Error: " + ex.getMessage());
         fortune.setTimestamp(LocalDateTime.now());
         return fortune;
     }
