@@ -2,10 +2,10 @@ package com.fastturtle.fortuneconsumer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @SpringBootApplication
-@EnableFeignClients
+@EnableAspectJAutoProxy(exposeProxy = true)
 public class FortuneConsumerApplication {
 
     public static void main(String[] args) {
