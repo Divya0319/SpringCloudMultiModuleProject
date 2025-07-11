@@ -2,6 +2,9 @@ package com.fastturtle.apigateway.models;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
 public class AppUser {
@@ -13,6 +16,9 @@ public class AppUser {
     private String email;
 
     private String password; // Store encoded password (e.g., BCrypt)
+
+    @ManyToMany
+    private Set<Role> roles = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -36,5 +42,13 @@ public class AppUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
     }
 }

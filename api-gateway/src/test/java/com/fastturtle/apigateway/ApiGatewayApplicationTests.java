@@ -24,7 +24,7 @@ class ApiGatewayApplicationTests {
 
     @Test
     public void testSaveAppUser() {
-        AppUser saved = appUserService.saveUser("divya@gmail.com", "divya@123");
+        AppUser saved = appUserService.saveUser("divya@gmail.com", "divya@123", "ADMIN");
 
         // Assert
         assertThat(saved.getId()).isNotNull();

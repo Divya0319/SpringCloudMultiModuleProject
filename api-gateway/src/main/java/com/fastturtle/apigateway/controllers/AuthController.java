@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -36,12 +37,13 @@ public class AuthController {
     public ResponseEntity<String> login(@RequestBody Map<String, String> body) {
         String email = body.get("email");
         String password = body.get("password");
+        String role = body.get("role");
 
         Optional<AppUser> userOptional = appUserService.findByEmail(email);
 
         if(!StringUtils.isBlank(email) && !StringUtils.isBlank(password)) {
             if (userOptional.isPresent() && passwordEncoder.matches(password, userOptional.get().getPassword())) {
-                String token = jwtUtil.generateToken(email);
+                String token = jwtUtil.generateToken(userOptional.get().getId(), email, List.of(role));
                 return ResponseEntity.ok(token);
             }
         }
